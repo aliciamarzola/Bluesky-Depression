@@ -118,7 +118,7 @@ model.save_pretrained("bert_depressive_classifier")
 tokenizer.save_pretrained("bert_depressive_classifier")
 
 # ================================
-# TESTANDO O MODELO COM 10 FRASES
+# TESTANDO O MODELO ATÉ ENCONTRAR UM EXEMPLO DEPRESSIVO
 # ================================
 
 # Carregar modelo treinado e tokenizer
@@ -128,22 +128,18 @@ model = BertForSequenceClassification.from_pretrained(model_path)
 model.to(device)
 model.eval()
 
-# Selecionar 10 frases do conjunto de validação
-sample_texts = val_texts[:10]
-sample_labels = val_labels[:10]
+# Iterar sobre os exemplos do conjunto de validação
+for text, label in zip(val_texts, val_labels):
+    inputs = tokenizer(text, padding=True, truncation=True, max_length=128, return_tensors="pt").to(device)
 
-# Tokenizar as frases
-inputs = tokenizer(sample_texts, padding=True, truncation=True, max_length=128, return_tensors="pt").to(device)
+    with torch.no_grad():
+        output = model(**inputs)
+        prediction = torch.argmax(output.logits, dim=1).cpu().item()
 
-# Fazer previsões
-with torch.no_grad():
-    outputs = model(**inputs)
-    predictions = torch.argmax(outputs.logits, dim=1).cpu().numpy()
-
-# Exibir os resultados
-print("\n===== TESTE COM 10 FRASES =====\n")
-for i in range(len(sample_texts)):
-    print(f"Texto: {sample_texts[i]}")
-    print(f"Classificação Predita: {'Depressivo' if predictions[i] == 1 else 'Não Depressivo'}")
-    print(f"Rótulo Real: {'Depressivo' if sample_labels[i] == 1 else 'Não Depressivo'}")
-    print("-" * 80)
+    if prediction == 1 and label == 1:
+        print("\n===== EXEMPLO ENCONTRADO =====\n")
+        print(f"Texto: {text}")
+        print("Classificação Predita: Depressivo")
+        print("Rótulo Real: Depressivo")
+        print("-" * 80)
+        break  # Para a busca assim que encontrar um exemplo válido

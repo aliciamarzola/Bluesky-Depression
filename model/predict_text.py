@@ -24,16 +24,7 @@ class DepressionClassifier:
         
         for text, label in zip(texts, labels):
             prediction = self.predict(text)
-
-            if not vp_found and prediction == 1 and label == 1:
-                print("\n===== VERDADEIRO POSITIVO (VP) =====")
-                print(f"Texto: {text}")
-                print("Classificação Predita: Depressivo ✅")
-                print("Rótulo Real: Depressivo ✅")
-                print("-" * 80)
-                vp_found = True
-
-            elif not fp_found and prediction == 1 and label == 0:
+            if not fp_found and prediction == 1 and label == 0:
                 print("\n===== FALSO POSITIVO (FP) =====")
                 print(f"Texto: {text}")
                 print("Classificação Predita: Depressivo ✅")
@@ -52,3 +43,21 @@ class DepressionClassifier:
             # Para quando encontrar os três exemplos
             if vp_found and fp_found and fn_found:
                 break
+
+    def find_true_positives(self, texts, labels, num_examples=5):
+            vp_count = 0  # Contador de Verdadeiros Positivos
+
+            for text, label in zip(texts, labels):
+                prediction = self.predict(text)
+
+                if prediction == 1 and label == 1:
+                    print(f"\n===== VERDADEIRO POSITIVO {vp_count+1} =====")
+                    print(f"Texto: {text}")
+                    print("Classificação Predita: Depressivo ✅")
+                    print("Rótulo Real: Depressivo ✅")
+                    print("-" * 80)
+                    
+                    vp_count += 1
+                
+                if vp_count >= num_examples:
+                    break  # Para quando encontrar os 5 exemplos

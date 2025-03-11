@@ -19,4 +19,4 @@ texto_exemplo = "Estou me sentindo muito triste e sem esperança."
 print(f"Classificação: {classifier.predict(texto_exemplo)}")
 
 # Encontrar um exemplo depressivo do conjunto de validação
-classifier.find_depressive_example(val_texts, val_labels)
+classifier.find_examples(val_texts, val_labels)

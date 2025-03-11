@@ -17,15 +17,38 @@ class DepressionClassifier:
             output = self.model(**inputs)
             prediction = torch.argmax(output.logits, dim=1).cpu().item()
 
-        return "Depressivo" if prediction == 1 else "Não Depressivo"
+        return prediction  # Retorna 1 para "Depressivo" e 0 para "Não Depressivo"
 
-    def find_depressive_example(self, texts, labels):
+    def find_examples(self, texts, labels):
+        vp_found, fp_found, fn_found = False, False, False  # Flags para controle
+        
         for text, label in zip(texts, labels):
             prediction = self.predict(text)
-            if prediction == "Depressivo" and label == 1:
-                print("\n===== EXEMPLO ENCONTRADO =====\n")
+
+            if not vp_found and prediction == 1 and label == 1:
+                print("\n===== VERDADEIRO POSITIVO (VP) =====")
                 print(f"Texto: {text}")
-                print("Classificação Predita: Depressivo")
-                print("Rótulo Real: Depressivo")
+                print("Classificação Predita: Depressivo ✅")
+                print("Rótulo Real: Depressivo ✅")
                 print("-" * 80)
-                break  # Para assim que encontrar um exemplo válido
+                vp_found = True
+
+            elif not fp_found and prediction == 1 and label == 0:
+                print("\n===== FALSO POSITIVO (FP) =====")
+                print(f"Texto: {text}")
+                print("Classificação Predita: Depressivo ✅")
+                print("Rótulo Real: Não Depressivo ❌")
+                print("-" * 80)
+                fp_found = True
+
+            elif not fn_found and prediction == 0 and label == 1:
+                print("\n===== FALSO NEGATIVO (FN) =====")
+                print(f"Texto: {text}")
+                print("Classificação Predita: Não Depressivo ❌")
+                print("Rótulo Real: Depressivo ✅")
+                print("-" * 80)
+                fn_found = True
+
+            # Para quando encontrar os três exemplos
+            if vp_found and fp_found and fn_found:
+                break

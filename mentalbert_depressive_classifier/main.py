@@ -1,9 +1,9 @@
-from predict_text import DepressionClassifier
+from predict_text_mental import DepressionClassifier
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Carregar dataset
-df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/scrapersdataset_limpo.csv")
+df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/scrapersdataset_limpo.csv")
 df["text"] = df["text"].astype(str).fillna("")
 
 texts = df["text"].tolist()
@@ -20,4 +20,4 @@ print(f"Classificação: {classifier.predict(texto_exemplo)}")
 
 # Encontrar um exemplo depressivo do conjunto de validação
 classifier.find_examples(val_texts, val_labels)
-classifier.find_true_positives(val_texts, val_labels, 5)
+classifier.find_true_positives(val_texts, val_labels,10)

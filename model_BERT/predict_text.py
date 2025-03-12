@@ -56,6 +56,13 @@ class DepressionClassifier:
                     print("Classificação Predita: Depressivo ✅")
                     print("Rótulo Real: Depressivo ✅")
                     print("-" * 80)
+
+                elif prediction == 0 and label == 0:
+                    print(f"\n===== VERDADEIRO NEGATIVO {vp_count+1} =====")
+                    print(f"Texto: {text}")
+                    print("Classificação Predita: Não Depressivo ❌")
+                    print("Rótulo Real: Não Depressivo ❌")
+                    print("-" * 80)
                     
                     vp_count += 1
                 

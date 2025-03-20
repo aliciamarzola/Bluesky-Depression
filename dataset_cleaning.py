@@ -1,15 +1,23 @@
 import pandas as pd
 
-df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset_inicial.csv")
+df1 = pd.read_csv("dataset_1_final.csv")
+df2 = pd.read_csv("dataset_2_final.csv")
 
-df_cleaned = df.drop(columns=["repostCount", "replyCount", "link", "image", "createdAt"])
+df2 = df2.drop_duplicates(subset=["text"])
+df2 = df2.loc[df2['depressive']==1]
+df2 = df2['depressive'].astype('Int64')
 
-df_cleaned = df_cleaned.drop_duplicates(subset=["text"])
+df1.to_csv(f"dataset-characterization.csv", index=False)
 
-save_path = "/scratch/gabriel.lemos/Bluesky-Depression/scrapers"
+df1 = df1.drop(columns=["repostCount", "replyCount", "link", "image", "createdAt"])
+df1['depressive'] = df1['depressive'].apply(lambda x: 0 if x not in [0, 1] else x)
 
-df_cleaned.to_csv(f"{save_path}dataset_limpo.csv", index=False)
+df_concat = pd.concat([df1, df2], axis=0)
+df_concat = df_concat[['text', 'depressive']]
+print(df_concat.head())
 
-depressive_count = df_cleaned["depressive"].value_counts()
+df_concat.to_csv(f"dataset_final.csv", index=False)
 
-depressive_count.to_csv(f"{save_path}depressive_count.csv", index=True)
+depressive_count = df_concat["depressive"].value_counts()
+
+depressive_count.to_csv(f"depressive_count.csv", index=True)

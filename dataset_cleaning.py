@@ -1,4 +1,6 @@
 import pandas as pd
+import emoji
+
 
 df1 = pd.read_csv("dataset_1_final.csv")
 df2 = pd.read_csv("dataset_2_final.csv")
@@ -17,8 +19,6 @@ df1.to_csv(f"dataset-characterization.csv", index=False)
 df_concat = pd.concat([df1, df2], axis=0)
 df_concat = df_concat[['text', 'depressive']]
 print(df_concat.head())
-
-import emoji
 
 def remove_emojis(text):
     return emoji.replace_emoji(text, replace='') if isinstance(text, str) else text

@@ -33,13 +33,15 @@ class TextDataset(Dataset):
             'labels': torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/scrapersdataset_limpo.csv", 
+def train_model(dataset_path="dataset_final.csv", 
                 model_save_path="mentalbert_depressive_classifier", 
                 model_name="mental/mental-bert-base-uncased", 
                 epochs=3):
 
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")
+    df = df[df['text'].str.strip() != '']
+
 
     texts = df["text"].tolist()
     labels = df["depressive"].tolist()
@@ -74,14 +76,12 @@ def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/
             total_loss += loss.item()
             progress_bar.set_postfix(loss=loss.item())
 
-            # Coletar previsões e labels reais
             logits = outputs.logits.detach().cpu()
             batch_predictions = torch.argmax(logits, dim=1).numpy()
             batch_labels = labels.cpu().numpy()
             predictions.extend(batch_predictions)
             true_labels.extend(batch_labels)
 
-        # Calcular métricas de avaliação
         accuracy = accuracy_score(true_labels, predictions)
         precision = precision_score(true_labels, predictions)
         recall = recall_score(true_labels, predictions)

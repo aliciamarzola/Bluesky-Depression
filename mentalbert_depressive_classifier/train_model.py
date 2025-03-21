@@ -36,7 +36,7 @@ class TextDataset(Dataset):
 def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv", 
                 model_save_path="mentalbert_depressive_classifier", 
                 model_name="mental/mental-bert-base-uncased", 
-                epochs=3):
+                epochs=10):
 
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")

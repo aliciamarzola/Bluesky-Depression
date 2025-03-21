@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Carregar dataset
-df = pd.read_csv("Bluesky-Depression/dataset_final_f_emoji.csv")
+df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo.csv")
 df["text"] = df["text"].astype(str).fillna("")
 
 texts = df["text"].tolist()

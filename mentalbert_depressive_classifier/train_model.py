@@ -33,7 +33,7 @@ class TextDataset(Dataset):
             'labels': torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/scrapersdataset_limpo.csv", 
+def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv", 
                 model_save_path="mentalbert_depressive_classifier", 
                 model_name="mental/mental-bert-base-uncased", 
                 epochs=3):

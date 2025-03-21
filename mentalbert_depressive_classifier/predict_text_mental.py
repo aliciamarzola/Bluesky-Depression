@@ -20,44 +20,36 @@ class DepressionClassifier:
         return prediction  # Retorna 1 para "Depressivo" e 0 para "Não Depressivo"
 
     def find_examples(self, texts, labels):
-        vp_found, fp_found, fn_found = False, False, False  # Flags para controle
-        
+        vp_count, fp_count, fn_count = 0, 0, 0  # Contadores para os exemplos encontrados
+        max_examples = 5  # Número máximo de exemplos para cada categoria
+
         for text, label in zip(texts, labels):
             prediction = self.predict(text)
-            if not fp_found and prediction == 1 and label == 0:
+            
+            if fp_count < max_examples and prediction == 1 and label == 0:
                 print("\n===== FALSO POSITIVO (FP) =====")
                 print(f"Texto: {text}")
                 print("Classificação Predita: Depressivo ✅")
                 print("Rótulo Real: Não Depressivo ❌")
                 print("-" * 80)
-                fp_found = True
+                fp_count += 1
 
-            elif not fn_found and prediction == 0 and label == 1:
+            elif fn_count < max_examples and prediction == 0 and label == 1:
                 print("\n===== FALSO NEGATIVO (FN) =====")
                 print(f"Texto: {text}")
                 print("Classificação Predita: Não Depressivo ❌")
                 print("Rótulo Real: Depressivo ✅")
                 print("-" * 80)
-                fn_found = True
+                fn_count += 1
 
-            # Para quando encontrar os três exemplos
-            if vp_found and fp_found and fn_found:
+            elif vp_count < max_examples and prediction == 1 and label == 1:
+                print(f"\n===== VERDADEIRO POSITIVO (VP) {vp_count+1} =====")
+                print(f"Texto: {text}")
+                print("Classificação Predita: Depressivo ✅")
+                print("Rótulo Real: Depressivo ✅")
+                print("-" * 80)
+                vp_count += 1
+            
+            # Para quando encontrar 5 exemplos de cada
+            if vp_count >= max_examples and fp_count >= max_examples and fn_count >= max_examples:
                 break
-
-    def find_true_positives(self, texts, labels, num_examples):
-            vp_count = 0  # Contador de Verdadeiros Positivos
-
-            for text, label in zip(texts, labels):
-                prediction = self.predict(text)
-
-                if prediction == 1 and label == 1:
-                    print(f"\n===== VERDADEIRO POSITIVO {vp_count+1} =====")
-                    print(f"Texto: {text}")
-                    print("Classificação Predita: Depressivo ✅")
-                    print("Rótulo Real: Depressivo ✅")
-                    print("-" * 80)
-                    
-                    vp_count += 1
-                
-                if vp_count >= num_examples:
-                    break  # Para quando encontrar os 5 exemplos

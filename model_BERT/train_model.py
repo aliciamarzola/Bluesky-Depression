@@ -5,7 +5,9 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from torch.optim import AdamW
 from tqdm import tqdm
+from sklearn.metrics import classification_report
 
+# Definição do dispositivo
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class TextDataset(Dataset):
@@ -32,9 +34,7 @@ class TextDataset(Dataset):
             'labels': torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo.csv", 
-                model_save_path="bert_depressive_classifier", epochs=3):
-
+def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset_final_limpo_emoji.csv", model_save_path="bert_depressive_classifier", epochs=3):
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")
 
@@ -74,24 +74,30 @@ def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/
 
     def evaluate(model, dataloader, epoch):
         model.eval()
-        correct = 0
-        total = 0
+        total_loss = 0
+        predictions, true_labels = [], []
         progress_bar = tqdm(dataloader, desc=f"Validating Epoch {epoch+1}", leave=True)
 
         with torch.no_grad():
             for batch in progress_bar:
                 input_ids, attention_mask, labels = batch["input_ids"].to(device), batch["attention_mask"].to(device), batch["labels"].to(device)
-                outputs = model(input_ids, attention_mask=attention_mask)
-                predictions = torch.argmax(outputs.logits, dim=1)
-                correct += (predictions == labels).sum().item()
-                total += labels.size(0)
+                outputs = model(input_ids, attention_mask=attention_mask, labels=labels)
+                loss = outputs.loss
+                total_loss += loss.item()
+                preds = torch.argmax(outputs.logits, dim=1)
+                predictions.extend(preds.cpu().numpy())
+                true_labels.extend(labels.cpu().numpy())
 
-        return correct / total
+        avg_loss = total_loss / len(dataloader)
+        report = classification_report(true_labels, predictions, digits=4)
+        return avg_loss, report
 
     for epoch in range(epochs):
         train_loss = train(model, train_loader, optimizer, epoch)
-        val_accuracy = evaluate(model, val_loader, epoch)
-        print(f"Epoch {epoch+1} Completed - Loss: {train_loss:.4f}, Validation Accuracy: {val_accuracy:.4f}")
+        val_loss, val_report = evaluate(model, val_loader, epoch)
+        print(f"Epoch {epoch+1} Completed - Train Loss: {train_loss:.4f}, Val Loss: {val_loss:.4f}")
+        print("Validation Metrics:")
+        print(val_report)
 
     model.save_pretrained(model_save_path)
     tokenizer.save_pretrained(model_save_path)

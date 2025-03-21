@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Carregar o arquivo CSV
-df = pd.read_csv('/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo.csv')  # Substitua 'arquivo.csv' pelo nome do seu arquivo
+df = pd.read_csv('/scratch/gabriel.lemos/Bluesky-Depression/dataset_final_f_emoji2.csv')  # Substitua 'arquivo.csv' pelo nome do seu arquivo
 
 # Contar a frequência dos valores na coluna desejada
 coluna = 'depressive'  # Substitua pelo nome da coluna desejada

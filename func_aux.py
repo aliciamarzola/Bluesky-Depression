@@ -12,4 +12,4 @@ def remove_emojis(text):
 df['text'] = df['text'].apply(remove_emojis)
 
 # Salvar o CSV limpo
-df.to_csv("dataset_final_f_emoji.csv", index=False)
+df.to_csv("dataset_final_f_emoji2.csv", index=False)

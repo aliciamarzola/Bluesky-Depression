@@ -24,3 +24,5 @@ def split_csv(file_path, output_dir, chunk_size=500):
 
 # Exemplo de uso:
 split_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_2 - merged.csv.csv", "/scratch/gabriel.lemos/Bluesky-Depression/dataset")
+
+

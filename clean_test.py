@@ -1,7 +1,7 @@
 import pandas as pd
 
 # Caminho do dataset original
-dataset_path = "/scratch/gabriel.lemos/Bluesky-Depression/scrapers/dataset_bluesky-posts-scraper_2025-03-07_21-09-38-269.csv"
+dataset_path = "/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset2_limpo.csv"
 
 # Tentar ler o dataset detectando automaticamente o delimitador correto
 try:
@@ -22,7 +22,7 @@ df_cleaned = df[["id", "text"]].copy()
 df_cleaned["depressive"] = 0
 
 # Caminho para salvar o novo dataset
-save_path = "/scratch/gabriel.lemos/Bluesky-Depression/dataset/data_test1"
+save_path = "/scratch/gabriel.lemos/Bluesky-Depression/dataset/data_test2.csv"
 
 # Salvar o dataset processado
 df_cleaned.to_csv(save_path, index=False)

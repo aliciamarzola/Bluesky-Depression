@@ -56,6 +56,7 @@ class DepressionClassifier:
                     print("Classificação Predita: Depressivo ✅")
                     print("Rótulo Real: Depressivo ✅")
                     print("-" * 80)
+                    vp_counts += 1
 
                 elif prediction == 0 and label == 0:
                     print(f"\n===== VERDADEIRO NEGATIVO {vp_count+1} =====")
@@ -63,8 +64,8 @@ class DepressionClassifier:
                     print("Classificação Predita: Não Depressivo ❌")
                     print("Rótulo Real: Não Depressivo ❌")
                     print("-" * 80)
-                    
-                    vp_count += 1
+                    vp_counts += 1
+
                 
                 if vp_count >= num_examples:
                     break  # Para quando encontrar os 5 exemplos

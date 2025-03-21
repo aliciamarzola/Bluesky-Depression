@@ -18,16 +18,12 @@ df_concat = pd.concat([df1, df2], axis=0)
 df_concat = df_concat[['text', 'depressive']]
 print(df_concat.head())
 
-import re
+import emoji
 
-emoji_pattern = re.compile("["
-        u"\U0001F600-\U0001F64F"  # emoticons
-        u"\U0001F300-\U0001F5FF"  # symbols & pictographs
-        u"\U0001F680-\U0001F6FF"  # transport & map symbols
-        u"\U0001F1E0-\U0001F1FF"  # flags (iOS)
-                           "]+", flags=re.UNICODE)
+def remove_emojis(text):
+    return emoji.replace_emoji(text, replace='') if isinstance(text, str) else text
 
-df_concat['text'] = df_concat['text'].apply(lambda x: (emoji_pattern.sub(r'', x) if pd.notnull(x) else x))
+df_concat['text'] = df_concat['text'].apply(remove_emojis)
 
 df_concat.to_csv(f"dataset_final.csv", index=False)
 

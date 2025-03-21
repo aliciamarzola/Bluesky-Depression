@@ -34,7 +34,7 @@ class TextDataset(Dataset):
             'labels': torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset_final_limpo_emoji.csv", model_save_path="bert_depressive_classifier", epochs=3):
+def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv", model_save_path="bert_depressive_classifier", epochs=3):
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")
 

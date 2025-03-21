@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Carregar o arquivo CSV
-df = pd.read_csv('/scratch/gabriel.lemos/Bluesky-Depression/dataset_final_f_emoji2.csv')  # Substitua 'arquivo.csv' pelo nome do seu arquivo
+df = pd.read_csv('/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_classifado_BERT.csv')  # Substitua 'arquivo.csv' pelo nome do seu arquivo
 
 # Contar a frequência dos valores na coluna desejada
 coluna = 'depressive'  # Substitua pelo nome da coluna desejada
@@ -11,7 +11,7 @@ contagem = df[coluna].value_counts()
 # Exibir o resultado
 print(contagem)
 
-# Função para unir dois datasets e remover duplicatas com base em uma coluna específica
+""" # Função para unir dois datasets e remover duplicatas com base em uma coluna específica
 def unir_datasets(arquivo1, arquivo2, coluna_chave, diretorio_saida='novo_diretorio'):
     df1 = pd.read_csv(arquivo1)
     df2 = pd.read_csv(arquivo2)
@@ -38,3 +38,4 @@ def unir_datasets(arquivo1, arquivo2, coluna_chave, diretorio_saida='novo_direto
 # Exemplo de uso
 novo_df, caminho = unir_datasets('/scratch/gabriel.lemos/Bluesky-Depression/dataset_final_f_emoji.csv', '/scratch/gabriel.lemos/Bluesky-Depression/dataset/scrapersdataset_limpo.csv', 'text')
 print(f'Dataset salvo em: {caminho}')
+ """

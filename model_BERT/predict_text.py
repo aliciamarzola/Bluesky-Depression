@@ -19,44 +19,39 @@ class DepressionClassifier:
 
         return prediction  # Retorna 1 para "Depressivo" e 0 para "Não Depressivo"
 
-    def find_examples(self, texts, labels):
-        vp_found, fp_found, fn_found = False, False, False  # Flags para controle
-        
+    def find_false_positives(self, texts, labels, num_examples):
+        fp_count = 0  # Contador de Falsos Positivos
+
         for text, label in zip(texts, labels):
             prediction = self.predict(text)
-            if not fp_found and prediction == 1 and label == 0:
-                print("\n===== FALSO POSITIVO (FP) =====")
+
+            if prediction == 1 and label == 0:
+                print(f"\n===== FALSO POSITIVO {fp_count+1} =====")
                 print(f"Texto: {text}")
                 print("Classificação Predita: Depressivo ✅")
                 print("Rótulo Real: Não Depressivo ❌")
                 print("-" * 80)
-                fp_found = True
+                fp_count += 1
+            
+            if fp_count >= num_examples:
+                break  # Para quando encontrar os exemplos desejados
+            
+    def count_false_positives(self, texts, labels):
+        fp_count = 0
 
-            elif not fn_found and prediction == 0 and label == 1:
-                print("\n===== FALSO NEGATIVO (FN) =====")
-                print(f"Texto: {text}")
-                print("Classificação Predita: Não Depressivo ❌")
-                print("Rótulo Real: Depressivo ✅")
-                print("-" * 80)
-                fn_found = True
+        for text, label in zip(texts, labels):
+            prediction = self.predict(text)
+            if prediction == 1 and label == 0:
+                fp_count += 1
+        
+        return fp_count
+    
+    def get_false_positives(self, texts, labels):
+        false_positives = []
 
-            # Para quando encontrar os três exemplos
-            if vp_found and fp_found and fn_found:
-                break
-
-    def find_true_positives(self, texts, labels, num_examples=5):
-            vp_count = 0  # Contador de Verdadeiros Positivos
-
-            for text, label in zip(texts, labels):
-                prediction = self.predict(text)
-
-                if prediction == 1 and label == 1:
-                    print(f"\n===== VERDADEIRO POSITIVO {vp_count+1} =====")
-                    print(f"Texto: {text}")
-                    print("Classificação Predita: Depressivo ✅")
-                    print("Rótulo Real: Depressivo ✅")
-                    print("-" * 80)
-
-                
-                if vp_count >= num_examples:
-                    break  # Para quando encontrar os 5 exemplos
+        for text, label in zip(texts, labels):
+            prediction = self.predict(text)
+            if prediction == 1 and label == 0:
+                false_positives.append({"text": text, "depressive": 1})
+        
+        return false_positives

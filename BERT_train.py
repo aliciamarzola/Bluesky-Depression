@@ -40,8 +40,7 @@ class TextDataset(Dataset):
             'labels': torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-# Carregar dataset
-df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/scrapersdataset_limpo.csv")
+df = pd.read_csv("dataset_final.csv")
 
 # Converter a coluna 'text' para string e remover valores nulos
 df["text"] = df["text"].astype(str).fillna("")

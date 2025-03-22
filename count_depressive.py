@@ -1,15 +1,50 @@
-import torch
-from transformers import BertTokenizer, BertForSequenceClassification
 import pandas as pd
-from sklearn.model_selection import train_test_split
-import emoji
+import matplotlib.pyplot as plt
+import seaborn as sns
 
-def remove_emojis(text):
-    return emoji.replace_emoji(text, "")
-# Carregar dataset
-df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset2_limpo.csv")
-df["text"] = df["text"].astype(str).fillna("")
-df["text"] = df["text"].apply(remove_emojis)  # Remover emojis
-df = df.drop_duplicates(subset=["text"]).reset_index(drop=True)
-df = df[df['text'].str.strip() != '']
-df = df[df['depressive'] == 1]  # Manter apenas os depressivos
+# Carregar o CSV (substitua 'arquivo.csv' pelo nome do seu arquivo)
+df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv")
+
+# Define the column containing item types (replace 'item_type' with the actual column name)
+column_name = "depressive"
+
+# # Count the frequency of each item type
+count_data = df[column_name].value_counts()
+
+# Set scientific publication style
+sns.set_theme(style="whitegrid", palette="muted")
+
+# ====== Histogram (Barplot) ======
+plt.figure(figsize=(10, 6))
+sns.barplot(x=count_data.index, y=count_data.values, color="royalblue")
+
+# Improve visualization
+plt.xlabel("Item Type", fontsize=14, fontweight="bold")
+plt.ylabel("Frequency", fontsize=14, fontweight="bold")
+plt.title("Frequency Distribution of Item Types", fontsize=16, fontweight="bold")
+plt.xticks(rotation=45, ha="right", fontsize=12)
+plt.yticks(fontsize=12)
+plt.grid(axis="y", linestyle="--", alpha=0.7)
+
+# Remove unnecessary borders
+sns.despine()
+
+# Save the histogram
+plt.savefig("frequency_histogram.png", dpi=300, bbox_inches="tight")
+plt.show()
+
+
+# ====== Boxplot ======
+plt.figure(figsize=(6, 6))
+sns.boxplot(y=count_data.values, color="darkorange")
+
+# Improve visualization
+plt.ylabel("Frequency", fontsize=14, fontweight="bold")
+plt.title("Boxplot of Item Type Frequencies", fontsize=16, fontweight="bold")
+
+# Remove unnecessary borders
+sns.despine()
+
+# Save the boxplot
+plt.savefig("frequency_boxplot.png", dpi=300, bbox_inches="tight")
+plt.show()

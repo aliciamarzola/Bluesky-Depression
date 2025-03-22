@@ -6,6 +6,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from torch.optim import AdamW
 from tqdm import tqdm
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -33,8 +34,42 @@ class TextDataset(Dataset):
             'labels': torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
-def train_model(dataset_path="dataset_final.csv", 
-                model_save_path="bert_depressive_classifier", epochs=3):
+
+def final_metrics(model, dataloader):
+    model.eval()
+    all_labels = []
+    all_predictions = []
+
+    with torch.no_grad():
+        for batch in tqdm(dataloader, desc="Calculating Final Metrics", leave=True):
+            input_ids = batch["input_ids"].to(device)
+            attention_mask = batch["attention_mask"].to(device)
+            labels = batch["labels"].to(device)
+
+            outputs = model(input_ids, attention_mask=attention_mask)
+            predictions = torch.argmax(outputs.logits, dim=1)
+
+            all_labels.extend(labels.cpu().numpy())
+            all_predictions.extend(predictions.cpu().numpy())
+
+    # Calcula as métricas
+    accuracy = accuracy_score(all_labels, all_predictions)
+    precision = precision_score(all_labels, all_predictions)
+    recall = recall_score(all_labels, all_predictions)
+    f1 = f1_score(all_labels, all_predictions)
+    cm = confusion_matrix(all_labels, all_predictions)
+
+    print("\n=== Métricas finais no conjunto de validação ===")
+    print(f"Accuracy:  {accuracy:.4f}")
+    print(f"Precision: {precision:.4f}")
+    print(f"Recall:    {recall:.4f}")
+    print(f"F1-Score:  {f1:.4f}")
+    print(f"Confusion Matrix:\n{cm}")
+
+
+
+def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv", 
+                model_save_path="bert_depressive_classifier", epochs=5):
 
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")
@@ -50,6 +85,9 @@ def train_model(dataset_path="dataset_final.csv",
     # adiciona oversampling
     ros = RandomOverSampler(sampling_strategy='auto', random_state=42)
     train_texts, train_labels = ros.fit_resample(pd.DataFrame(train_texts), pd.DataFrame(train_labels))
+    train_texts = train_texts[0].tolist()  # converte para lista
+    train_labels = train_labels[0].tolist()  # converte para lista """
+
 
     # converte textos em tokens que o modelo bert consegue entender
     tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
@@ -112,6 +150,7 @@ def train_model(dataset_path="dataset_final.csv",
     model.save_pretrained(model_save_path)
     tokenizer.save_pretrained(model_save_path)
     print(f"Modelo treinado e salvo em {model_save_path}")
+    final_metrics(model, val_loader)
 
 if __name__ == "__main__":
     train_model()

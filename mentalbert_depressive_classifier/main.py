@@ -15,11 +15,14 @@ _, val_texts, _, val_labels = train_test_split(texts, labels, test_size=0.2, ran
 classifier = DepressionClassifier()
 
 # Encontrar um exemplo depressivo do conjunto de validação
-classifier.find_false_positives(val_texts, val_labels, 15)
+#classifier.find_false_positives(val_texts, val_labels, 15)
 #classifier.find_true_positives(val_texts, val_labels, 5)
 
 false_positive_count = classifier.count_false_positives(val_texts, val_labels)
 print(f"Número de Falsos Positivos: {false_positive_count}")
+
+false_negative_count = classifier.count_false_negatives(val_texts, val_labels)
+print(f"Número de Falsos Negativos: {false_negative_count}")
 
 
 # Obter falsos positivos

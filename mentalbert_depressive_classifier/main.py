@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Carregar dataset
-df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_tudo0_sem_emoji.csv")
+df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv")
 df["text"] = df["text"].astype(str).fillna("")
 
 texts = df["text"].tolist()
@@ -24,7 +24,7 @@ print(f"Número de Falsos Positivos: {false_positive_count}")
 
 # Obter falsos positivos
 false_positives = classifier.get_false_positives(val_texts, val_labels)
-false_negatives = classifier.get_false_positives(val_texts, val_labels)
+false_negatives = classifier.get_false_negatives(val_texts, val_labels)
 # Criar novo dataset
 df_fp = pd.DataFrame(false_positives)
 df_fp.to_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/false_positives_dataset.csv", index=False)

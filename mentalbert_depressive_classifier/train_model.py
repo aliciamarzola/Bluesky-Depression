@@ -38,6 +38,7 @@ def final_metrics(model, dataloader):
     model.eval()
     all_labels = []
     all_predictions = []
+    all_texts =[]
 
     with torch.no_grad():
         for batch in tqdm(dataloader, desc="Calculating Final Metrics", leave=True):
@@ -63,11 +64,11 @@ def final_metrics(model, dataloader):
     print(f"Precision: {precision:.4f}")
     print(f"Recall:    {recall:.4f}")
     print(f"F1-Score:  {f1:.4f}")
-    print(f"Confusion Matrix:\n{cm}")
-
+    print(f"Confusion Matrix:\n{cm}")   
+    
 
 def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv", 
-                model_save_path="bert_depressive_classifier", epochs=5):
+                model_save_path="bert_depressive_classifier", epochs=3):
 
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")
@@ -81,7 +82,7 @@ def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/
     train_texts, val_texts, train_labels, val_labels = train_test_split(texts, labels, test_size=0.2, random_state=42)
 
     # adiciona oversampling
-    """ ros = RandomOverSampler(sampling_strategy='auto', random_state=42)
+    ros = RandomOverSampler(sampling_strategy='auto', random_state=42)
     train_texts, train_labels = ros.fit_resample(pd.DataFrame(train_texts), pd.DataFrame(train_labels))
     train_texts = train_texts[0].tolist()  # converte para lista
     train_labels = train_labels[0].tolist()  # converte para lista """

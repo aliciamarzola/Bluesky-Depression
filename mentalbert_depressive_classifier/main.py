@@ -24,7 +24,12 @@ print(f"Número de Falsos Positivos: {false_positive_count}")
 
 # Obter falsos positivos
 false_positives = classifier.get_false_positives(val_texts, val_labels)
+false_negatives = classifier.get_false_positives(val_texts, val_labels)
 # Criar novo dataset
 df_fp = pd.DataFrame(false_positives)
 df_fp.to_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/false_positives_dataset.csv", index=False)
 print("Novo dataset com falsos positivos salvo como 'false_positives_dataset.csv'")
+
+df_fp = pd.DataFrame(false_negatives)
+df_fp.to_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/false_negatives_dataset.csv", index=False)
+print("Novo dataset com falsos positivos salvo como 'false_negatives_dataset.csv'")

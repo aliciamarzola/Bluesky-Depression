@@ -66,7 +66,7 @@ def final_metrics(model, dataloader):
     print(f"Confusion Matrix:\n{cm}")
 
 
-def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv", 
+def train_model(dataset_path="dataset/dataset_final_limpo_emoji.csv", 
                 model_save_path="bert_depressive_classifier", epochs=3):
 
     df = pd.read_csv(dataset_path)

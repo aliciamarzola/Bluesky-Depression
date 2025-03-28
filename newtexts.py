@@ -29,7 +29,9 @@ dataset = dataset[['text', 'depressive']]
 def remove_emojis(text):
     return emoji.replace_emoji(text, replace='') if isinstance(text, str) else text
 
-dataset['text'] = dataset['text'].apply(remove_emojis)
+dataset['text'] = dataset['text'].apply(remove_emojis) 
+dataset['text'] = dataset['text'].str.lower()
+
 print(len(dataset))
 
 dataset.to_csv(f"dataset_novo.csv", index=False)

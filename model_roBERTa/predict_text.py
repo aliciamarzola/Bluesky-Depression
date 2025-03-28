@@ -50,7 +50,7 @@ class DepressionClassifier:
 
         for text, label in zip(texts, labels):
             prediction = self.predict(text)
-            if prediction == 0 and label == 1:
+            if prediction == 1 and label == 1:
                 fn_count += 1
 
             return fn_count
@@ -70,7 +70,7 @@ class DepressionClassifier:
 
         for text, label in zip(texts, labels):
             prediction = self.predict(text)
-            if prediction == 0 and label == 1:
+            if prediction == 1 and label == 1:
                 false_negatives.append({"text": text, "depressive": 0})
         
         return false_negatives

@@ -3,7 +3,7 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 
 # Carregar dataset
-df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv")
+df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_novo.csv")
 df["text"] = df["text"].astype(str).fillna("")
 
 texts = df["text"].tolist()
@@ -33,6 +33,6 @@ df_fp = pd.DataFrame(false_positives)
 df_fp.to_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/false_positives_dataset.csv", index=False)
 print("Novo dataset com falsos positivos salvo como 'false_positives_dataset.csv'")
 
-df_fp = pd.DataFrame(false_negatives)
+""" df_fp = pd.DataFrame(false_negatives)
 df_fp.to_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/false_negatives_dataset.csv", index=False)
-print("Novo dataset com falsos positivos salvo como 'false_negatives_dataset.csv'")
+print("Novo dataset com falsos positivos salvo como 'false_negatives_dataset.csv'") """

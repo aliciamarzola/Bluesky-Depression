@@ -72,6 +72,7 @@ def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/
 
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")
+    df['text'] = df['text'].str.lower()
     df = df[df['text'].str.strip() != '']
     df = df.drop_duplicates(subset=['text'])
 

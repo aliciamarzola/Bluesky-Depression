@@ -69,11 +69,13 @@ class DepressionClassifier:
     
     def get_false_negatives(self, texts, labels):
         false_negatives = []
-
+        seen_texts = set()
+        
         for text, label in zip(texts, labels):
             prediction = self.predict(text)
-            if prediction == 0 and label == 0:
+            if prediction == 0 and label == 1 and text not in seen_texts:
                 false_negatives.append({"text": text, "depressive": 0})
+                seen_texts.add(text)
         
         return false_negatives
     

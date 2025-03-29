@@ -75,11 +75,11 @@ def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/
 
     train_texts, val_texts, train_labels, val_labels = train_test_split(texts, labels, test_size=0.2, random_state=42)
 
-    """ ros = RandomOverSampler(sampling_strategy='auto', random_state=42)
+    ros = RandomOverSampler(sampling_strategy='auto', random_state=42)
     train_texts, train_labels = ros.fit_resample(pd.DataFrame(train_texts), pd.DataFrame(train_labels))
     train_texts = train_texts[0].tolist()
     train_labels = train_labels[0].tolist()
- """
+
     tokenizer = RobertaTokenizer.from_pretrained("roberta-base")
     train_dataset = TextDataset(train_texts, train_labels, tokenizer)
     val_dataset = TextDataset(val_texts, val_labels, tokenizer)

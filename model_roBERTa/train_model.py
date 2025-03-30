@@ -64,7 +64,8 @@ def final_metrics(model, dataloader):
     print(f"F1-Score:  {f1:.4f}")
     print(f"Confusion Matrix:\n{cm}")
 
-def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv", model_save_path="roberta_classifier", epochs=3):
+def train_model(dataset_path="/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_3003.csv",
+                model_save_path="roberta_classifier", epochs=5):
     df = pd.read_csv(dataset_path)
     df["text"] = df["text"].astype(str).fillna("")
     df = df[df['text'].str.strip() != '']

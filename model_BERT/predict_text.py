@@ -32,7 +32,7 @@ class DepressionClassifier:
                 print("Rótulo Real: Não Depressivo ❌")
                 print("-" * 80)
                 fp_count += 1
-            
+
             if fp_count >= num_examples:
                 break  # Para quando encontrar os exemplos desejados
             
@@ -45,6 +45,15 @@ class DepressionClassifier:
                 fp_count += 1
         
         return fp_count
+    def count_false_negatives(self, texts, labels):
+        fn_count = 0
+
+        for text, label in zip(texts, labels):
+            prediction = self.predict(text)
+            if prediction == 1 and label == 1:
+                fn_count += 1
+
+            return fn_count
     
     def get_false_positives(self, texts, labels):
         false_positives = []
@@ -55,3 +64,15 @@ class DepressionClassifier:
                 false_positives.append({"text": text, "depressive": 1})
         
         return false_positives
+    
+    def get_false_negatives(self, texts, labels):
+        false_negatives = []
+
+        for text, label in zip(texts, labels):
+            prediction = self.predict(text)
+            if prediction == 1 and label == 1:
+                false_negatives.append({"text": text, "depressive": 0})
+        
+        return false_negatives
+    
+    

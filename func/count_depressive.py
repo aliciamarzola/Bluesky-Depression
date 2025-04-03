@@ -3,13 +3,14 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Carregar o CSV (substitua 'arquivo.csv' pelo nome do seu arquivo)
-df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_limpo_emoji.csv")
+df = pd.read_csv("/scratch/gabriel.lemos/Bluesky-Depression/dataset/dataset_final_3003.csv")
 
 # Define the column containing item types (replace 'item_type' with the actual column name)
 column_name = "depressive"
 
 # # Count the frequency of each item type
 count_data = df[column_name].value_counts()
+print(count_data)
 
 # Set scientific publication style
 sns.set_theme(style="whitegrid", palette="muted")
